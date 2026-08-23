@@ -1071,51 +1071,55 @@ a=z;m(n);var U=[null,vc,vc,Js,ys,ns,cs,Tr,Ir,xr,mr,br,Sq,Hq,wq,lq,aq,Rp,Gp,vp,kp
   globals.window["downloadStateSuperNintendo"] = downloadStateSuperNintendo
 
   function uploadStateSuperNintendo() {
-    // drop the input used by the previous call, if the picker was cancelled
-    // it is still hanging around in the DOM.
-    if (
-      globals.window["SUPERNINTENDO_STATE_INPUT"] &&
-      globals.window["SUPERNINTENDO_STATE_INPUT"].parentNode
-    ) {
-      globals.window["SUPERNINTENDO_STATE_INPUT"].parentNode.removeChild(
-        globals.window["SUPERNINTENDO_STATE_INPUT"]
-      )
-    }
-    globals.window["SUPERNINTENDO_STATE_INPUT"] = null
-
-    var input = document.createElement("input")
-    input.type = "file"
-    input.accept = ".state"
-    input.style.display = "none"
-
-    // the input must stay in the DOM while the native file picker is open.
-    // on ios safari a detached input (and its change listener) can be
-    // garbage collected while the page sits in the background behind the
-    // picker, and then the change event never fires.
-    document.getElementsByTagName("body")[0].appendChild(input)
-    globals.window["SUPERNINTENDO_STATE_INPUT"] = input
-
-    input.addEventListener("change", function (event) {
-      var file = event.target.files[0]
-      if (!file) {
-        return
+    try {
+      // drop the input used by the previous call, if the picker was cancelled
+      // it is still hanging around in the DOM.
+      if (
+        globals.window["SUPERNINTENDO_STATE_INPUT"] &&
+        globals.window["SUPERNINTENDO_STATE_INPUT"].parentNode
+      ) {
+        globals.window["SUPERNINTENDO_STATE_INPUT"].parentNode.removeChild(
+          globals.window["SUPERNINTENDO_STATE_INPUT"]
+        )
       }
+      globals.window["SUPERNINTENDO_STATE_INPUT"] = null
 
-      var reader = new FileReader()
-      reader.addEventListener("load", function (e) {
-        try {
-          var fileData = new Uint8Array(e.target.result)
-          var statePtr = setUint8ArrayToCMemory(fileData)
-          Module._loadState(statePtr, fileData.length)
-        } catch (error) {
-          //
+      var input = document.createElement("input")
+      input.type = "file"
+      input.accept = ".state"
+      input.style.display = "none"
+
+      // the input must stay in the DOM while the native file picker is open.
+      // on ios safari a detached input (and its change listener) can be
+      // garbage collected while the page sits in the background behind the
+      // picker, and then the change event never fires.
+      document.getElementsByTagName("body")[0].appendChild(input)
+      globals.window["SUPERNINTENDO_STATE_INPUT"] = input
+
+      input.addEventListener("change", function (event) {
+        var file = event.target.files[0]
+        if (!file) {
+          return
         }
+
+        var reader = new FileReader()
+        reader.addEventListener("load", function (e) {
+          try {
+            var fileData = new Uint8Array(e.target.result)
+            var statePtr = setUint8ArrayToCMemory(fileData)
+            Module._loadState(statePtr, fileData.length)
+          } catch (error) {
+            //
+          }
+        })
+
+        reader.readAsArrayBuffer(file)
       })
 
-      reader.readAsArrayBuffer(file)
-    })
-
-    input.click()
+      input.click()
+    } catch (err) {
+      //
+    }
   }
 
   globals.window["uploadStateSuperNintendo"] = uploadStateSuperNintendo
