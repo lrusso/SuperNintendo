@@ -141,9 +141,17 @@ a=z;m(n);var U=[null,vc,vc,Js,ys,ns,cs,Tr,Ir,xr,mr,br,Sq,Hq,wq,lq,aq,Rp,Gp,vp,kp
     if (elapsed < globals.window["SUPERNINTENDO_FRAME_INTERVAL"] - 1) {
       return
     }
-    globals.window["SUPERNINTENDO_LAST_FRAME_TIME"] =
-      globals.window["SUPERNINTENDO_LAST_FRAME_TIME"] +
-      globals.window["SUPERNINTENDO_FRAME_INTERVAL"]
+    // after a stall (file picker, app switch, gc pause) the accumulated debt
+    // would be repaid one frame per rAF callback, which is double speed on a
+    // 120hz display. drop it when more than 3 frames of debt would be
+    // left after this one, matching the cap MAME already uses.
+    if (elapsed - globals.window["SUPERNINTENDO_FRAME_INTERVAL"] > globals.window["SUPERNINTENDO_FRAME_INTERVAL"] * 3) {
+      globals.window["SUPERNINTENDO_LAST_FRAME_TIME"] = timestamp
+    } else {
+      globals.window["SUPERNINTENDO_LAST_FRAME_TIME"] =
+        globals.window["SUPERNINTENDO_LAST_FRAME_TIME"] +
+        globals.window["SUPERNINTENDO_FRAME_INTERVAL"]
+    }
 
     Module._setJoypadInput(globals.window["SUPERNINTENDO_KEY_INPUT_1"])
     Module._setJoypadInput2(globals.window["SUPERNINTENDO_KEY_INPUT_2"])
