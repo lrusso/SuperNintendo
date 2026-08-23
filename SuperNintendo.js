@@ -1043,6 +1043,10 @@ a=z;m(n);var U=[null,vc,vc,Js,ys,ns,cs,Tr,Ir,xr,mr,br,Sq,Hq,wq,lq,aq,Rp,Gp,vp,kp
 
   function downloadStateSuperNintendo() {
     var stateSize = Module._getStateSaveSize()
+    if (stateSize <= 0) {
+      return
+    }
+
     var statePtr = Module._saveState()
     if (statePtr == 0) {
       return
