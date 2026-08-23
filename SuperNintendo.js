@@ -52,6 +52,7 @@ a=z;m(n);var U=[null,vc,vc,Js,ys,ns,cs,Tr,Ir,xr,mr,br,Sq,Hq,wq,lq,aq,Rp,Gp,vp,kp
   globals.window["SUPERNINTENDO_KEYMAP2"] = {}
   globals.window["SUPERNINTENDO_LAST_MOUSE_X"] = null
   globals.window["SUPERNINTENDO_LAST_MOUSE_Y"] = null
+  globals.window["SUPERNINTENDO_STATE_INPUT"] = null
 
   function pushAudio() {
     if (!globals.window["SUPERNINTENDO_GAME_RUNNING"]) {
@@ -1070,9 +1071,29 @@ a=z;m(n);var U=[null,vc,vc,Js,ys,ns,cs,Tr,Ir,xr,mr,br,Sq,Hq,wq,lq,aq,Rp,Gp,vp,kp
   globals.window["downloadStateSuperNintendo"] = downloadStateSuperNintendo
 
   function uploadStateSuperNintendo() {
+    // drop the input used by the previous call, if the picker was cancelled
+    // it is still hanging around in the DOM.
+    if (
+      globals.window["SUPERNINTENDO_STATE_INPUT"] &&
+      globals.window["SUPERNINTENDO_STATE_INPUT"].parentNode
+    ) {
+      globals.window["SUPERNINTENDO_STATE_INPUT"].parentNode.removeChild(
+        globals.window["SUPERNINTENDO_STATE_INPUT"]
+      )
+    }
+    globals.window["SUPERNINTENDO_STATE_INPUT"] = null
+
     var input = document.createElement("input")
     input.type = "file"
     input.accept = ".state"
+    input.style.display = "none"
+
+    // the input must stay in the DOM while the native file picker is open.
+    // on ios safari a detached input (and its change listener) can be
+    // garbage collected while the page sits in the background behind the
+    // picker, and then the change event never fires.
+    document.getElementsByTagName("body")[0].appendChild(input)
+    globals.window["SUPERNINTENDO_STATE_INPUT"] = input
 
     input.addEventListener("change", function (event) {
       var file = event.target.files[0]
