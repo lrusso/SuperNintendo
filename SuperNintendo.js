@@ -1076,6 +1076,10 @@ a=z;m(n);var U=[null,vc,vc,Js,ys,ns,cs,Tr,Ir,xr,mr,br,Sq,Hq,wq,lq,aq,Rp,Gp,vp,kp
 
   function uploadStateSuperNintendo() {
     try {
+      if (!globals.window["SUPERNINTENDO_GAME_BOOTED"]) {
+        return
+      }
+
       // drop the input used by the previous call, if the picker was cancelled
       // it is still hanging around in the DOM.
       if (
