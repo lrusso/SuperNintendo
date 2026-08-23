@@ -1116,6 +1116,7 @@ a=z;m(n);var U=[null,vc,vc,Js,ys,ns,cs,Tr,Ir,xr,mr,br,Sq,Hq,wq,lq,aq,Rp,Gp,vp,kp
             var fileData = new Uint8Array(e.target.result)
             var statePtr = setUint8ArrayToCMemory(fileData)
             Module._loadState(statePtr, fileData.length)
+            Module._my_free(statePtr)
           } catch (error) {
             //
           }
