@@ -98,6 +98,7 @@ This emulator is compatible with both Android and iOS devices. However, WebKit o
 ## Main differences with the original project:
 
 - Transpiled JS to pre-ES2015 via `node ConverterES5.js SuperNintendo.js`.
+- Fixed graphical glitches in Donkey Kong Country.
 
 ## This is a modified version of snes9x2005-wasm:
 
