@@ -19,7 +19,7 @@ A Super Nintendo emulator with mobile compatibility designed for running in pure
 
 ## How to use it:
 
-Examples of loading local and online files can be found [here](https://github.com/lrusso/SuperNintendo/blob/main/SuperNintendo.htm#L141-L193) and [here](https://github.com/lrusso/SuperNintendo/blob/main/SuperNintendo.htm#L221-L268).
+Examples of loading local and online files can be found [here](https://github.com/lrusso/SuperNintendo/blob/main/SuperNintendo.htm#L166-L218) and [here](https://github.com/lrusso/SuperNintendo/blob/main/SuperNintendo.htm#L249-L296).
 
 ```js
 embedSuperNintendo({
